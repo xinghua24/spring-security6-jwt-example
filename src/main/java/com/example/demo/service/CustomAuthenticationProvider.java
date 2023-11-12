@@ -17,32 +17,32 @@ import org.springframework.stereotype.Service;
 @Qualifier("CustomAuthenticationProvider")
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-  @Autowired
-  @Qualifier("CustomUserDetailsService")
-  UserDetailsService userDetailsService;
+    @Autowired
+    @Qualifier("CustomUserDetailsService")
+    UserDetailsService userDetailsService;
 
-  @Autowired
-  BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
-  @Override
-  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    String username = authentication.getName();
-    String password = authentication.getCredentials().toString();
-    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-    if (userDetails != null) {
-      if (passwordEncoder.matches(password, userDetails.getPassword())) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-            username, password, userDetails.getAuthorities());
-        return token;
-      } else {
-        throw new BadCredentialsException("Bad Credentials for "+ username);
-      }
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String username = authentication.getName();
+        String password = authentication.getCredentials().toString();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        if (userDetails != null) {
+            if (passwordEncoder.matches(password, userDetails.getPassword())) {
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                    username, password, userDetails.getAuthorities());
+                return token;
+            } else {
+                throw new BadCredentialsException("Bad Credentials for " + username);
+            }
+        }
+        throw new UsernameNotFoundException(username + " not found.");
     }
-    throw new UsernameNotFoundException(username + " not found.");
-  }
 
-  @Override
-  public boolean supports(Class<?> authentication) {
-    return authentication.equals(UsernamePasswordAuthenticationToken.class);
-  }
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
 }

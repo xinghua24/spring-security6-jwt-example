@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
 import java.time.ZonedDateTime;
 
 @Entity
@@ -24,7 +25,7 @@ public class Post {
     @Column(name = "TITLE", length = 255)
     private String title;
 
-    @Column(name = "CONTENT", columnDefinition ="text" )
+    @Column(name = "CONTENT", columnDefinition = "text")
     private String content;
 
     @Column(name = "CREATED")
